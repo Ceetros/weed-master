@@ -1,11 +1,11 @@
 package Enum
 
-type RoleEnum uint8
+type RoleEnum string
 
 const (
-	Tutor     RoleEnum = 0
-	Manager   RoleEnum = 1
-	Doctor    RoleEnum = 2
-	Secretary RoleEnum = 3
-	Admin     RoleEnum = 4
+	Tutor     RoleEnum = "TUTOR"
+	Manager   RoleEnum = "MANAGER"
+	Doctor    RoleEnum = "DOCTOR"
+	Secretary RoleEnum = "SECRETARY"
+	Admin     RoleEnum = "ADMIN"
 )
