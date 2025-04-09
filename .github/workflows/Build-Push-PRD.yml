@@ -40,7 +40,7 @@ jobs:
           port: 22
           password: '${{ secrets.PASSWORD }}'
           source: build/
-          target: /var/www/ApiVET
+          target: /home/ubuntu/apivet
 
       - name: Run
         uses: appleboy/ssh-action@master
@@ -51,7 +51,7 @@ jobs:
           password: '${{ secrets.PASSWORD }}'
           port: 22
           script: |
-            cd /var/www/ApiVET/build
+            cd /home/ubuntu/apivet
             ls -l
             sudo systemctl start goweb
             sudo systemctl status goweb
