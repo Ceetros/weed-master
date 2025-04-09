@@ -1,0 +1,190 @@
+basePath: /
+definitions:
+  Enum.AccountTypeEnum:
+    enum:
+    - USER
+    - CLINICAL
+    type: string
+    x-enum-varnames:
+    - User
+    - Clinical
+  Enum.RoleEnum:
+    enum:
+    - 0
+    - 1
+    - 2
+    - 3
+    - 4
+    type: integer
+    x-enum-varnames:
+    - Tutor
+    - Manager
+    - Doctor
+    - Secretary
+    - Admin
+  Request.ClinicalData:
+    properties:
+      city:
+        type: string
+      complement:
+        type: string
+      document:
+        type: string
+      name:
+        type: string
+      number:
+        type: string
+      pixKey:
+        type: string
+      pixType:
+        type: string
+      state:
+        type: string
+      street:
+        type: string
+      zipCode:
+        type: string
+    type: object
+  Request.LoginRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  Request.RegisterRequest:
+    properties:
+      born_date:
+        type: string
+      clinical:
+        $ref: '#/definitions/Request.ClinicalData'
+      email:
+        type: string
+      name:
+        type: string
+      password:
+        type: string
+      type:
+        allOf:
+        - $ref: '#/definitions/Enum.AccountTypeEnum'
+        example: CLINICAL
+    required:
+    - born_date
+    - email
+    - name
+    - password
+    type: object
+  Response.ClinicalInfo:
+    properties:
+      expired:
+        example: false
+        type: boolean
+      expiresIn:
+        example: "2025-04-08T21:45:00Z"
+        type: string
+      name:
+        example: John Doe's Clinical Company'
+        type: string
+    type: object
+  Response.ErrorResponse:
+    properties:
+      error:
+        example: Usuário ou Senha inválidos
+        type: string
+    type: object
+  Response.LoginResponse:
+    properties:
+      clinical:
+        $ref: '#/definitions/Response.ClinicalInfo'
+      token:
+        example: firebase-token
+        type: string
+      user:
+        $ref: '#/definitions/Response.UserInfo'
+    type: object
+  Response.UserInfo:
+    properties:
+      email:
+        example: johndoe@example.com
+        type: string
+      id:
+        example: 99b74adf-e10b-4a6f-9fb9-8d3efb13f843
+        type: string
+      name:
+        example: John Doe
+        type: string
+      role:
+        allOf:
+        - $ref: '#/definitions/Enum.RoleEnum'
+        example: 1
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: API para gerenciamento de clínica veterinária
+  title: Vet API
+  version: "1.0"
+paths:
+  /api/v1/auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Autentica o usuário e retorna tokens de acesso
+      parameters:
+      - description: Credenciais
+        in: body
+        name: credentials
+        required: true
+        schema:
+          $ref: '#/definitions/Request.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Response.LoginResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Response.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response.ErrorResponse'
+      summary: Login com email e senha
+      tags:
+      - Auth
+  /api/v1/auth/register:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Dados do novo usuário
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/Request.RegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/Response.LoginResponse'
+        "400":
+          description: Requisição inválida
+          schema:
+            $ref: '#/definitions/Response.ErrorResponse'
+        "500":
+          description: Erro interno
+          schema:
+            $ref: '#/definitions/Response.ErrorResponse'
+      summary: Registra um novo usuário
+      tags:
+      - Auth
+swagger: "2.0"
