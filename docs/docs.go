@@ -120,13 +120,13 @@ const docTemplate = `{
             ]
         },
         "Enum.RoleEnum": {
-            "type": "integer",
+            "type": "string",
             "enum": [
-                0,
-                1,
-                2,
-                3,
-                4
+                "TUTOR",
+                "MANAGER",
+                "DOCTOR",
+                "SECRETARY",
+                "ADMIN"
             ],
             "x-enum-varnames": [
                 "Tutor",
@@ -189,17 +189,21 @@ const docTemplate = `{
         "Request.RegisterRequest": {
             "type": "object",
             "required": [
-                "born_date",
+                "birthDate",
+                "document",
                 "email",
                 "name",
                 "password"
             ],
             "properties": {
-                "born_date": {
+                "birthDate": {
                     "type": "string"
                 },
                 "clinical": {
                     "$ref": "#/definitions/Request.ClinicalData"
+                },
+                "document": {
+                    "type": "string"
                 },
                 "email": {
                     "type": "string"
@@ -268,10 +272,6 @@ const docTemplate = `{
                     "type": "string",
                     "example": "johndoe@example.com"
                 },
-                "id": {
-                    "type": "string",
-                    "example": "99b74adf-e10b-4a6f-9fb9-8d3efb13f843"
-                },
                 "name": {
                     "type": "string",
                     "example": "John Doe"
@@ -282,7 +282,7 @@ const docTemplate = `{
                             "$ref": "#/definitions/Enum.RoleEnum"
                         }
                     ],
-                    "example": 1
+                    "example": "1"
                 }
             }
         }

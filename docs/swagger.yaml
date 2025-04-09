@@ -10,12 +10,12 @@ definitions:
     - Clinical
   Enum.RoleEnum:
     enum:
-    - 0
-    - 1
-    - 2
-    - 3
-    - 4
-    type: integer
+    - TUTOR
+    - MANAGER
+    - DOCTOR
+    - SECRETARY
+    - ADMIN
+    type: string
     x-enum-varnames:
     - Tutor
     - Manager
@@ -57,10 +57,12 @@ definitions:
     type: object
   Request.RegisterRequest:
     properties:
-      born_date:
+      birthDate:
         type: string
       clinical:
         $ref: '#/definitions/Request.ClinicalData'
+      document:
+        type: string
       email:
         type: string
       name:
@@ -72,7 +74,8 @@ definitions:
         - $ref: '#/definitions/Enum.AccountTypeEnum'
         example: CLINICAL
     required:
-    - born_date
+    - birthDate
+    - document
     - email
     - name
     - password
@@ -110,16 +113,13 @@ definitions:
       email:
         example: johndoe@example.com
         type: string
-      id:
-        example: 99b74adf-e10b-4a6f-9fb9-8d3efb13f843
-        type: string
       name:
         example: John Doe
         type: string
       role:
         allOf:
         - $ref: '#/definitions/Enum.RoleEnum'
-        example: 1
+        example: "1"
     type: object
 host: localhost:8080
 info:
