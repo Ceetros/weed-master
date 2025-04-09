@@ -4,7 +4,7 @@ name: Build-Push-PRD
     branches:
       - master
 jobs:
-  build-GoAppliation:
+  build-prd:
     runs-on: ubuntu-latest
 
     steps:
@@ -28,12 +28,6 @@ jobs:
       - name: Display-Build-Golang-App
         run: ls -R build/
 
-      - name: Create-Env-File
-        run: 'echo "APIKey=${{ secrets.APIKey }}" > build/.env'
-
-      - name: Display-Env-File
-        run: cat build/.env
-
       - name: Run-Unit-Test-Golang-App
         run: go test
 
@@ -53,7 +47,8 @@ jobs:
           host: '${{ secrets.VM_HOST }}'
           username: '${{ secrets.VM_USERNAME }}'
           key: '${{ secrets.VM_SSH_KEY }}'
-          port: '${{ secrets.VM_SSH_PORT }}'
+          password: '${{ secrets.PASSWORD }}'
+          port: 22
           script: |
             cd /var/www/ApiVET/build
             ls -l
