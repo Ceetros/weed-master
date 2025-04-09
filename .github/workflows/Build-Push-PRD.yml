@@ -4,7 +4,7 @@ name: Build-Push-PRD
     branches:
       - master
 jobs:
-  build-GoAppliation:
+  build-prd:
     runs-on: ubuntu-latest
 
     steps:
@@ -23,16 +23,10 @@ jobs:
         run: go mod download
 
       - name: Build-Golang-App
-        run: GOOS=linux go build -o build/MusicAlbumAPI -v
+        run: GOOS=linux go build -o build/main -v
 
       - name: Display-Build-Golang-App
         run: ls -R build/
-
-      - name: Create-Env-File
-        run: 'echo "APIKey=${{ secrets.APIKey }}" > build/.env'
-
-      - name: Display-Env-File
-        run: cat build/.env
 
       - name: Run-Unit-Test-Golang-App
         run: go test
@@ -43,9 +37,10 @@ jobs:
           host: '${{ secrets.VM_HOST }}'
           username: '${{ secrets.VM_USERNAME }}'
           key: '${{ secrets.VM_SSH_KEY }}'
-          port: '${{ secrets.VM_SSH_PORT }}'
+          port: 22
+          password: '${{ secrets.PASSWORD }}'
           source: build/
-          target: /var/www/ApiVET
+          target: /home/ubuntu/apivet
 
       - name: Run
         uses: appleboy/ssh-action@master
@@ -53,9 +48,10 @@ jobs:
           host: '${{ secrets.VM_HOST }}'
           username: '${{ secrets.VM_USERNAME }}'
           key: '${{ secrets.VM_SSH_KEY }}'
-          port: '${{ secrets.VM_SSH_PORT }}'
+          password: '${{ secrets.PASSWORD }}'
+          port: 22
           script: |
-            cd /var/www/ApiVET/build
+            cd /home/ubuntu/apivet
             ls -l
-            sudo systemctl reload nginx
-            sudo systemctl status nginx
+            sudo systemctl start goweb
+            sudo systemctl status goweb
