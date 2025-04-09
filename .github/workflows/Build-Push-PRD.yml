@@ -53,5 +53,6 @@ jobs:
           script: |
             cd /home/ubuntu/apivet
             ls -l
+            sudo systemctl stop goweb
             sudo systemctl start goweb
             sudo systemctl status goweb
