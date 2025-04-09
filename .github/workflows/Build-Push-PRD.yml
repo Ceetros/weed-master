@@ -57,5 +57,5 @@ jobs:
           script: |
             cd /var/www/ApiVET/build
             ls -l
-            sudo systemctl reload nginx
-            sudo systemctl status nginx
+            sudo systemctl start goweb
+            sudo systemctl status goweb
