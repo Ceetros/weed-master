@@ -1,17 +1,11 @@
 package Request
 
-import (
-	"Api/Data/Enum"
-)
-
 type RegisterRequest struct {
-	Name     string               `json:"name" binding:"required"`
-	Document string               `json:"document" binding:"required"`
-	Email    string               `json:"email" binding:"required,email"`
-	Password string               `json:"password" binding:"required"`
-	BornDate string               `json:"birthDate" binding:"required"`
-	Type     Enum.AccountTypeEnum `json:"type" example:"CLINICAL"`
-	Clinical *ClinicalData        `json:"clinical,omitempty"`
+	Name      string `json:"name" binding:"required"`
+	Document  string `json:"document" binding:"required"`
+	Email     string `json:"email" binding:"required,email"`
+	Password  string `json:"password" binding:"required"`
+	BirthDate string `json:"birthDate" binding:"required"`
 }
 
 type ClinicalData struct {

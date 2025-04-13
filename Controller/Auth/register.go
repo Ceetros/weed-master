@@ -2,7 +2,7 @@ package Auth
 
 import (
 	"Api/Data/Request"
-	"Api/Services"
+	"Api/Service"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )

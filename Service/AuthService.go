@@ -6,6 +6,7 @@ import (
 	"Api/Data/Enum"
 	"Api/Data/Models"
 	"Api/Data/Request"
+	"Api/Repository/UserRepository"
 	"Api/Utils"
 	"context"
 	"github.com/gin-gonic/gin"
@@ -17,8 +18,8 @@ import (
 )
 
 func LoginWithUser(email string, password string) (int, gin.H) {
-	var user Models.User
-	if err := Config.DB.Preload("ClinicalUser.Clinical").Where("email = ?", email).First(&user).Error; err != nil {
+	user := UserRepository.GetUserByEmail(email)
+	if user == nil {
 		return http.StatusUnauthorized, gin.H{"error": "Usuário ou Senha inválidos"}
 	}
 
@@ -55,27 +56,16 @@ func LoginWithUser(email string, password string) (int, gin.H) {
 }
 
 func RegisterUser(req Request.RegisterRequest) (int, gin.H) {
-	parsedDate, ee := time.ParseInLocation("2006-01-02", req.BornDate, time.UTC)
+	parsedDate, ee := time.ParseInLocation("2006-01-02", req.BirthDate, time.UTC)
 	if ee != nil {
 		return http.StatusBadRequest, gin.H{}
-	}
-
-	if req.Type != Enum.Clinical && req.Type != Enum.User {
-		return http.StatusBadRequest, gin.H{"error": "Tipo de usuário inválido"}
 	}
 
 	if req.Document == "" || !Utils.ValidateDocument(req.Document) {
 		return http.StatusBadRequest, gin.H{"error": "Documento inválido"}
 	}
 
-	isClinical := req.Type == Enum.Clinical
-
-	if isClinical && (req.Clinical.Document == "" || !Utils.ValidateDocument(req.Clinical.Document)) {
-		return http.StatusBadRequest, gin.H{"error": "Documento da Clínica inválido"}
-	}
-
-	var existing Models.User
-	if err := Config.DB.Where("email = ?", req.Email).First(&existing).Error; err == nil {
+	if UserRepository.GetUserByEmail(req.Email) == nil {
 		return http.StatusBadRequest, gin.H{"error": "Email já cadastrado"}
 	}
 
@@ -91,55 +81,9 @@ func RegisterUser(req Request.RegisterRequest) (int, gin.H) {
 			CPF:       req.Document,
 			BirthDate: parsedDate.Local(),
 		}
-
-		if isClinical {
-			user.Role = Enum.Manager
-		}
-
-		var clinical Models.Clinical
-		var address Models.Address
-
-		if isClinical {
-			clinical = Models.Clinical{
-				Name:        req.Clinical.Name,
-				Document:    req.Clinical.Document,
-				PixKey:      req.Clinical.PixKey,
-				NextPayment: time.Now(),
-			}
-			address = Models.Address{
-				Street:     req.Clinical.Street,
-				Number:     req.Clinical.Number,
-				Complement: req.Clinical.Complement,
-				City:       req.Clinical.City,
-				State:      req.Clinical.State,
-				ZipCode:    req.Clinical.ZipCode,
-				ClinicalID: clinical.ID,
-			}
-
-			if err := tx.Create(&clinical).Error; err != nil {
-				return err
-			}
-			if err := tx.Create(&address).Error; err != nil {
-				return err
-			}
-		}
-
-		if err := tx.Create(&user).Error; err != nil {
-			return err
-		}
-
-		if isClinical {
-			link := Models.ClinicalUser{
-				ID:         uuid.New(),
-				UserId:     user.ID,
-				ClinicalId: clinical.ID,
-			}
-			if err := tx.Create(&link).Error; err != nil {
-				return err
-			}
-
-			user.ClinicalUser = &link
-			user.ClinicalUser.Clinical = clinical
+		if err := UserRepository.RegisterUser(user, tx); err != nil {
+			tx.Rollback()
+			return *err
 		}
 
 		return nil
