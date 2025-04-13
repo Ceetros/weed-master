@@ -1,13 +1,5 @@
 basePath: /
 definitions:
-  Enum.AccountTypeEnum:
-    enum:
-    - USER
-    - CLINICAL
-    type: string
-    x-enum-varnames:
-    - User
-    - Clinical
   Enum.RoleEnum:
     enum:
     - TUTOR
@@ -22,29 +14,6 @@ definitions:
     - Doctor
     - Secretary
     - Admin
-  Request.ClinicalData:
-    properties:
-      city:
-        type: string
-      complement:
-        type: string
-      document:
-        type: string
-      name:
-        type: string
-      number:
-        type: string
-      pixKey:
-        type: string
-      pixType:
-        type: string
-      state:
-        type: string
-      street:
-        type: string
-      zipCode:
-        type: string
-    type: object
   Request.LoginRequest:
     properties:
       email:
@@ -59,8 +28,6 @@ definitions:
     properties:
       birthDate:
         type: string
-      clinical:
-        $ref: '#/definitions/Request.ClinicalData'
       document:
         type: string
       email:
@@ -69,10 +36,6 @@ definitions:
         type: string
       password:
         type: string
-      type:
-        allOf:
-        - $ref: '#/definitions/Enum.AccountTypeEnum'
-        example: CLINICAL
     required:
     - birthDate
     - document

@@ -108,17 +108,6 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "Enum.AccountTypeEnum": {
-            "type": "string",
-            "enum": [
-                "USER",
-                "CLINICAL"
-            ],
-            "x-enum-varnames": [
-                "User",
-                "Clinical"
-            ]
-        },
         "Enum.RoleEnum": {
             "type": "string",
             "enum": [
@@ -135,41 +124,6 @@ const docTemplate = `{
                 "Secretary",
                 "Admin"
             ]
-        },
-        "Request.ClinicalData": {
-            "type": "object",
-            "properties": {
-                "city": {
-                    "type": "string"
-                },
-                "complement": {
-                    "type": "string"
-                },
-                "document": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "number": {
-                    "type": "string"
-                },
-                "pixKey": {
-                    "type": "string"
-                },
-                "pixType": {
-                    "type": "string"
-                },
-                "state": {
-                    "type": "string"
-                },
-                "street": {
-                    "type": "string"
-                },
-                "zipCode": {
-                    "type": "string"
-                }
-            }
         },
         "Request.LoginRequest": {
             "type": "object",
@@ -199,9 +153,6 @@ const docTemplate = `{
                 "birthDate": {
                     "type": "string"
                 },
-                "clinical": {
-                    "$ref": "#/definitions/Request.ClinicalData"
-                },
                 "document": {
                     "type": "string"
                 },
@@ -213,14 +164,6 @@ const docTemplate = `{
                 },
                 "password": {
                     "type": "string"
-                },
-                "type": {
-                    "allOf": [
-                        {
-                            "$ref": "#/definitions/Enum.AccountTypeEnum"
-                        }
-                    ],
-                    "example": "CLINICAL"
                 }
             }
         },
