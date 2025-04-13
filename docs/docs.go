@@ -225,7 +225,7 @@ const docTemplate = `{
                             "$ref": "#/definitions/Enum.RoleEnum"
                         }
                     ],
-                    "example": "1"
+                    "example": "TUTOR"
                 }
             }
         }

@@ -82,7 +82,7 @@ definitions:
       role:
         allOf:
         - $ref: '#/definitions/Enum.RoleEnum'
-        example: "1"
+        example: TUTOR
     type: object
 host: localhost:8080
 info:

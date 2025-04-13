@@ -13,7 +13,7 @@ type LoginResponse struct {
 type UserInfo struct {
 	Name  string        `json:"name" example:"John Doe"`
 	Email string        `json:"email" example:"johndoe@example.com"`
-	Role  Enum.RoleEnum `json:"role" example:"1"`
+	Role  Enum.RoleEnum `json:"role" example:"TUTOR"`
 }
 
 type ClinicalInfo struct {
