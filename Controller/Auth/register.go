@@ -2,7 +2,7 @@ package Auth
 
 import (
 	"Api/Data/Request"
-	"Api/Service"
+	"Api/Service/AuthService"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -24,7 +24,7 @@ func Register(c *gin.Context) {
 		return
 	}
 
-	status, ret := Services.RegisterUser(req)
+	status, ret := AuthService.RegisterUser(req)
 
 	c.JSON(status, ret)
 }

@@ -8,11 +8,12 @@ type RegisterRequest struct {
 	BirthDate string `json:"birthDate" binding:"required"`
 }
 
-type ClinicalData struct {
-	Name       string `json:"name"`
-	Document   string `json:"document"`
-	PixKey     string `json:"pixKey"`
-	PixType    string `json:"pixType"`
+type ClinicalRegisterRequest struct {
+	Name     string `json:"name"`
+	Document string `json:"document"`
+}
+
+type AddressRequest struct {
 	ZipCode    string `json:"zipCode"`
 	Street     string `json:"street"`
 	Number     string `json:"number"`

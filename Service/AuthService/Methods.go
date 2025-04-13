@@ -1,4 +1,4 @@
-package Services
+package AuthService
 
 import (
 	"Api/Auth"
