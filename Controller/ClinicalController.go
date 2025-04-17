@@ -18,6 +18,6 @@ type ClinicalController struct {
 // @Success 201 {object} Response.ClinicalInfo
 // @Failure 400 {object} Response.ErrorResponse "Requisição inválida"
 // @Failure 500 {object} Response.ErrorResponse "Erro interno"
-// @Router /api/v1/clinicl/register [post]
+// @Router /api/v1/clinical/register [post]
 func (controller *ClinicalController) Register(c *gin.Context) {
 }
