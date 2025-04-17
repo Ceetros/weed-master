@@ -1,4 +1,4 @@
-package ClinicalService
+package Service
 
 import (
 	"Api/Abstractions/Repositories"

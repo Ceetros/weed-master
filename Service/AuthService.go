@@ -1,4 +1,4 @@
-package AuthService
+package Service
 
 import (
 	"Api/Abstractions/Repositories"

@@ -3,8 +3,7 @@ package Config
 import (
 	"Api/Controller"
 	"Api/Repositories"
-	"Api/Service/AuthService"
-	"Api/Service/ClinicalService"
+	"Api/Service"
 	"sync"
 )
 
@@ -17,7 +16,7 @@ type Kernel struct{}
 
 func (k *Kernel) InjectAuthController() Controller.AuthController {
 	userRepository := &Repositories.UserRepository{DB: DB}
-	userService := &AuthService.UserService{IUserRepository: userRepository}
+	userService := &Service.UserService{IUserRepository: userRepository}
 	authController := Controller.AuthController{IUserService: userService}
 
 	return authController
@@ -25,7 +24,7 @@ func (k *Kernel) InjectAuthController() Controller.AuthController {
 
 func (k *Kernel) InjectClinicalController() Controller.ClinicalController {
 	clinicalRepository := Repositories.ClinicalRepository{DB: DB}
-	clinicalService := &ClinicalService.ClinicalService{IClinicalRepository: clinicalRepository}
+	clinicalService := &Service.ClinicalService{IClinicalRepository: clinicalRepository}
 	clinicalController := Controller.ClinicalController{IClinicalService: clinicalService}
 
 	return clinicalController
