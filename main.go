@@ -9,6 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"log"
+	"os"
 )
 
 // TIP <p>To run your code, right-click the code and select <b>Run</b>.</p> <p>Alternatively, click
@@ -50,7 +51,7 @@ func main() {
 	r := gin.Default()
 	v1.RegisterControllers(r)
 	Swagger.RegisterController(r)
-	err = r.Run(":8080")
+	err = r.Run(":" + os.Getenv("API_PORT"))
 	if err != nil {
 		log.Fatal(err)
 		return

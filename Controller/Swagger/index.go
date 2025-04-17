@@ -6,6 +6,7 @@ import (
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"github.com/swaggo/swag"
+	"os"
 )
 
 func RegisterController(r *gin.Engine) {
@@ -20,6 +21,7 @@ func RegisterController(r *gin.Engine) {
 		Oauth2DefaultClientID:    "",
 	}
 	docs.SwaggerInfo.BasePath = "/api/v1/"
+	docs.SwaggerInfo.Host = os.Getenv("API_URL")
 	ginSwagger.CustomWrapHandler(&config, swaggerFiles.Handler)
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 }
