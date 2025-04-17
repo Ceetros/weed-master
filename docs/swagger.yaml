@@ -14,6 +14,13 @@ definitions:
     - Doctor
     - Secretary
     - Admin
+  Request.ClinicalRegisterRequest:
+    properties:
+      document:
+        type: string
+      name:
+        type: string
+    type: object
   Request.LoginRequest:
     properties:
       email:
@@ -150,4 +157,33 @@ paths:
       summary: Registra um novo usuário
       tags:
       - Auth
+  /api/v1/clinicl/register:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Dados da nova Clinica
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/Request.ClinicalRegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/Response.ClinicalInfo'
+        "400":
+          description: Requisição inválida
+          schema:
+            $ref: '#/definitions/Response.ErrorResponse'
+        "500":
+          description: Erro interno
+          schema:
+            $ref: '#/definitions/Response.ErrorResponse'
+      summary: Registra uma nova clinica
+      tags:
+      - Clinical
 swagger: "2.0"

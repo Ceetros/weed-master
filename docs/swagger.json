@@ -99,6 +99,51 @@
                     }
                 }
             }
+        },
+        "/api/v1/clinicl/register": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Clinical"
+                ],
+                "summary": "Registra uma nova clinica",
+                "parameters": [
+                    {
+                        "description": "Dados da nova Clinica",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Request.ClinicalRegisterRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/Response.ClinicalInfo"
+                        }
+                    },
+                    "400": {
+                        "description": "Requisição inválida",
+                        "schema": {
+                            "$ref": "#/definitions/Response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno",
+                        "schema": {
+                            "$ref": "#/definitions/Response.ErrorResponse"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -118,6 +163,17 @@
                 "Secretary",
                 "Admin"
             ]
+        },
+        "Request.ClinicalRegisterRequest": {
+            "type": "object",
+            "properties": {
+                "document": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
         },
         "Request.LoginRequest": {
             "type": "object",
