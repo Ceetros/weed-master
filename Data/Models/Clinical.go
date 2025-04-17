@@ -27,5 +27,6 @@ func (u *Clinical) BeforeCreate(tx *gorm.DB) (err error) {
 	u.ID = uuid.New()
 	u.CreatedAt = time.Now()
 	u.UpdatedAt = time.Now()
+	u.NextPayment = time.Now().AddDate(0, 1, 0)
 	return
 }
