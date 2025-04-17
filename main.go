@@ -3,9 +3,9 @@ package main
 import (
 	"Api/Auth"
 	"Api/Config"
-	"Api/Controller"
 	"Api/Controller/Swagger"
 	"Api/Data/Models"
+	v1 "Api/Routes/v1"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"log"
@@ -48,7 +48,7 @@ func main() {
 	Auth.InitFirebase()
 
 	r := gin.Default()
-	Controller.RegisterControllers(r)
+	v1.RegisterControllers(r)
 	Swagger.RegisterController(r)
 	err = r.Run(":8080")
 	if err != nil {

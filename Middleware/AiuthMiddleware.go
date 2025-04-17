@@ -20,7 +20,7 @@ func AuthMiddleware() gin.HandlerFunc {
 
 		idToken := strings.TrimPrefix(authHeader, "Bearer ")
 
-		client, err := Auth.FirebaseAuth.Auth(context.Background())
+		client, err := Auth.FirebaseApp.Auth(context.Background())
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Erro ao obter Firebase Auth"})
 			c.Abort()

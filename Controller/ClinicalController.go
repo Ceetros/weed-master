@@ -1,6 +1,13 @@
-package Clinical
+package Controller
 
-import "github.com/gin-gonic/gin"
+import (
+	"Api/Abstractions/Services"
+	"github.com/gin-gonic/gin"
+)
+
+type ClinicalController struct {
+	Services.IClinicalService
+}
 
 // Register godoc
 // @Summary Registra uma nova clinica
@@ -12,5 +19,5 @@ import "github.com/gin-gonic/gin"
 // @Failure 400 {object} Response.ErrorResponse "Requisição inválida"
 // @Failure 500 {object} Response.ErrorResponse "Erro interno"
 // @Router /api/v1/clinicl/register [post]
-func Register(c *gin.Context) {
+func (controller *ClinicalController) Register(c *gin.Context) {
 }

@@ -1,29 +1,31 @@
 package AuthService
 
 import (
+	"Api/Abstractions/Repositories"
 	"Api/Auth"
-	"Api/Config"
 	"Api/Data/Enum"
 	"Api/Data/Models"
 	"Api/Data/Request"
-	"Api/Repository/UserRepository"
 	"Api/Utils"
 	"context"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
-	"gorm.io/gorm"
 	"net/http"
 	"time"
 )
 
-func LoginWithUser(email string, password string) (int, gin.H) {
-	user := UserRepository.GetUserByEmail(email)
-	if user == nil {
+type UserService struct {
+	Repositories.IUserRepository
+}
+
+func (service *UserService) LoginWithUser(email string, password string) (int, gin.H) {
+	user, err := service.GetUserByEmail(email)
+	if err == nil {
 		return http.StatusUnauthorized, gin.H{"error": "Usuário ou Senha inválidos"}
 	}
 
-	err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
+	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
 	if err != nil {
 		return http.StatusUnauthorized, gin.H{"error": "Usuário ou Senha inválidos"}
 	}
@@ -55,7 +57,7 @@ func LoginWithUser(email string, password string) (int, gin.H) {
 	return http.StatusOK, ret
 }
 
-func RegisterUser(req Request.RegisterRequest) (int, gin.H) {
+func (service *UserService) RegisterUser(req Request.RegisterRequest) (int, gin.H) {
 	parsedDate, ee := time.ParseInLocation("2006-01-02", req.BirthDate, time.UTC)
 	if ee != nil {
 		return http.StatusBadRequest, gin.H{}
@@ -65,33 +67,25 @@ func RegisterUser(req Request.RegisterRequest) (int, gin.H) {
 		return http.StatusBadRequest, gin.H{"error": "Documento inválido"}
 	}
 
-	if UserRepository.GetUserByEmail(req.Email) == nil {
+	if _, err := service.GetUserByEmail(req.Email); err == nil {
 		return http.StatusBadRequest, gin.H{"error": "Email já cadastrado"}
 	}
 
 	hashedPassword, _ := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
-
-	err := Config.DB.Transaction(func(tx *gorm.DB) error {
-		user := Models.User{
-			ID:        uuid.New(),
-			Name:      req.Name,
-			Email:     req.Email,
-			Password:  string(hashedPassword),
-			Role:      Enum.Tutor,
-			CPF:       req.Document,
-			BirthDate: parsedDate.Local(),
-		}
-		if err := UserRepository.RegisterUser(user, tx); err != nil {
-			tx.Rollback()
-			return *err
-		}
-
-		return nil
-	})
+	user := Models.User{
+		ID:        uuid.New(),
+		Name:      req.Name,
+		Email:     req.Email,
+		Password:  string(hashedPassword),
+		Role:      Enum.Tutor,
+		CPF:       req.Document,
+		BirthDate: parsedDate.Local(),
+	}
+	err := service.CreateUser(user)
 
 	if err != nil {
 		return http.StatusInternalServerError, gin.H{"error": "Erro ao registar"}
 	}
 
-	return LoginWithUser(req.Email, req.Password)
+	return service.LoginWithUser(req.Email, req.Password)
 }
