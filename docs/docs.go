@@ -106,7 +106,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/clinicl/register": {
+        "/api/v1/clinical/register": {
             "post": {
                 "consumes": [
                     "application/json"

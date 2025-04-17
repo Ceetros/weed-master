@@ -21,7 +21,7 @@ func RegisterController(r *gin.Engine) {
 		Oauth2DefaultClientID:    "",
 	}
 	docs.SwaggerInfo.BasePath = "/api/v1/"
-	docs.SwaggerInfo.Host = os.Getenv("API_URL")
+	docs.SwaggerInfo.Host = os.Getenv("API_URL") + ": " + os.Getenv("API_PORT")
 
 	r.GET("/swagger/*any", ginSwagger.CustomWrapHandler(&config, swaggerFiles.Handler))
 }
