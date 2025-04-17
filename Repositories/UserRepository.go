@@ -12,7 +12,7 @@ type UserRepository struct {
 func (u UserRepository) GetUserByEmail(email string) (Models.User, error) {
 	output := Models.User{}
 
-	err := u.Table("Users").Where(&Models.User{Email: email}).First(&output)
+	err := u.Table("users").Where(&Models.User{Email: email}).First(&output)
 
 	return output, err.Error
 }
