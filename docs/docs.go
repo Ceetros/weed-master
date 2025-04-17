@@ -108,6 +108,11 @@ const docTemplate = `{
         },
         "/api/v1/clinical/register": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "consumes": [
                     "application/json"
                 ],
@@ -284,6 +289,13 @@ const docTemplate = `{
                     "example": "TUTOR"
                 }
             }
+        }
+    },
+    "securityDefinitions": {
+        "BearerAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
         }
     }
 }`

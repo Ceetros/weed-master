@@ -13,9 +13,9 @@ type ClinicalService struct {
 }
 
 func (c ClinicalService) Register(req Request.ClinicalRegisterRequest) (int, gin.H) {
-	_, err := c.GetClinicalByDocument(req.Document)
-	if err == nil {
-		return http.StatusUnauthorized, gin.H{"error": "Usuário ou Senha inválidos"}
+	status, err := c.GetClinicalByDocument(req.Document)
+	if status != http.StatusOK {
+		return http.StatusInternalServerError, gin.H{"error": err}
 	}
 
 	if regerr := c.IClinicalRepository.RegisterClinical(req); regerr != nil {

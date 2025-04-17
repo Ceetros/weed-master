@@ -21,7 +21,7 @@ type UserService struct {
 
 func (service *UserService) LoginWithUser(email string, password string) (int, gin.H) {
 	user, err := service.GetUserByEmail(email)
-	if err == nil {
+	if err != nil {
 		return http.StatusUnauthorized, gin.H{"error": "Usuário ou Senha inválidos"}
 	}
 
@@ -37,7 +37,7 @@ func (service *UserService) LoginWithUser(email string, password string) (int, g
 
 	clinical := gin.H{}
 
-	if user.Role != Enum.Tutor {
+	if user.Role != Enum.Tutor && user.Role != "" {
 		clinical = gin.H{
 			"name":      user.ClinicalUser.Clinical.Name,
 			"expiresIn": user.ClinicalUser.Clinical.NextPayment.Format(time.RFC3339),
@@ -60,7 +60,7 @@ func (service *UserService) LoginWithUser(email string, password string) (int, g
 func (service *UserService) RegisterUser(req Request.RegisterRequest) (int, gin.H) {
 	parsedDate, ee := time.ParseInLocation("2006-01-02", req.BirthDate, time.UTC)
 	if ee != nil {
-		return http.StatusBadRequest, gin.H{}
+		return http.StatusBadRequest, gin.H{"error": ee}
 	}
 
 	if req.Document == "" || !Utils.ValidateDocument(req.Document) {
@@ -77,7 +77,6 @@ func (service *UserService) RegisterUser(req Request.RegisterRequest) (int, gin.
 		Name:      req.Name,
 		Email:     req.Email,
 		Password:  string(hashedPassword),
-		Role:      Enum.Tutor,
 		CPF:       req.Document,
 		BirthDate: parsedDate.Local(),
 	}

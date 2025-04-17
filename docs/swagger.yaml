@@ -183,7 +183,14 @@ paths:
           description: Erro interno
           schema:
             $ref: '#/definitions/Response.ErrorResponse'
+      security:
+      - BearerAuth: []
       summary: Registra uma nova clinica
       tags:
       - Clinical
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

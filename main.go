@@ -20,6 +20,9 @@ import (
 // @description API para gerenciamento de clínica veterinária
 // @host localhost:8080
 // @BasePath /
+// @securityDefinitions.apikey BearerAuth
+// @in header
+// @name Authorization
 func main() {
 	err := godotenv.Load()
 	if err != nil {
