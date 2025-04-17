@@ -24,7 +24,7 @@ func (k *Kernel) InjectAuthController() Controller.AuthController {
 }
 
 func (k *Kernel) InjectClinicalController() Controller.ClinicalController {
-	clinicalRepository := &Repositories.ClinicalRepository{DB: DB}
+	clinicalRepository := Repositories.ClinicalRepository{DB: DB}
 	clinicalService := &ClinicalService.ClinicalService{IClinicalRepository: clinicalRepository}
 	clinicalController := Controller.ClinicalController{IClinicalService: clinicalService}
 

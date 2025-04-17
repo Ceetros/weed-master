@@ -6,7 +6,7 @@ import (
 )
 
 type ClinicalController struct {
-	Services.IClinicalService
+	IClinicalService Services.IClinicalService
 }
 
 // Register godoc
