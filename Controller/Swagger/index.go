@@ -14,7 +14,7 @@ func RegisterController(r *gin.Engine) {
 		URL:                      "doc.json",
 		DocExpansion:             "list",
 		InstanceName:             swag.Name,
-		Title:                    "Swagger UI",
+		Title:                    "Vet SAAS",
 		DefaultModelsExpandDepth: 1,
 		DeepLinking:              true,
 		PersistAuthorization:     false,
