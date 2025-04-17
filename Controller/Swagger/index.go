@@ -22,6 +22,6 @@ func RegisterController(r *gin.Engine) {
 	}
 	docs.SwaggerInfo.BasePath = "/api/v1/"
 	docs.SwaggerInfo.Host = os.Getenv("API_URL")
-	ginSwagger.CustomWrapHandler(&config, swaggerFiles.Handler)
-	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+
+	r.GET("/swagger/*any", ginSwagger.CustomWrapHandler(&config, swaggerFiles.Handler))
 }
