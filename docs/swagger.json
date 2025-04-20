@@ -9,98 +9,7 @@
     "host": "localhost:8080",
     "basePath": "/",
     "paths": {
-        "/api/v1/auth/login": {
-            "post": {
-                "description": "Autentica o usuário e retorna tokens de acesso",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Auth"
-                ],
-                "summary": "Login com email e senha",
-                "parameters": [
-                    {
-                        "description": "Credenciais",
-                        "name": "credentials",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/Request.LoginRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/Response.LoginResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/Response.ErrorResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/Response.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/auth/register": {
-            "post": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Auth"
-                ],
-                "summary": "Registra um novo usuário",
-                "parameters": [
-                    {
-                        "description": "Dados do novo usuário",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/Request.RegisterRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "Created",
-                        "schema": {
-                            "$ref": "#/definitions/Response.LoginResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Requisição inválida",
-                        "schema": {
-                            "$ref": "#/definitions/Response.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Erro interno",
-                        "schema": {
-                            "$ref": "#/definitions/Response.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/clinical/register": {
+        "/api/v1/sesor/update": {
             "post": {
                 "security": [
                     {
@@ -114,17 +23,17 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Clinical"
+                    "Sensor"
                 ],
-                "summary": "Registra uma nova clinica",
+                "summary": "Atualiza um sensor",
                 "parameters": [
                     {
-                        "description": "Dados da nova Clinica",
+                        "description": "Dados do sensor",
                         "name": "data",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/Request.ClinicalRegisterRequest"
+                            "$ref": "#/definitions/Request.UpdateSensorRequest"
                         }
                     }
                 ],
@@ -132,19 +41,19 @@
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/Response.ClinicalInfo"
+                            "type": "boolean"
                         }
                     },
                     "400": {
-                        "description": "Requisição inválida",
+                        "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/Response.ErrorResponse"
+                            "type": "boolean"
                         }
                     },
                     "500": {
-                        "description": "Erro interno",
+                        "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/Response.ErrorResponse"
+                            "type": "boolean"
                         }
                     }
                 }
@@ -152,135 +61,18 @@
         }
     },
     "definitions": {
-        "Enum.RoleEnum": {
-            "type": "string",
-            "enum": [
-                "TUTOR",
-                "MANAGER",
-                "DOCTOR",
-                "SECRETARY",
-                "ADMIN"
-            ],
-            "x-enum-varnames": [
-                "Tutor",
-                "Manager",
-                "Doctor",
-                "Secretary",
-                "Admin"
-            ]
-        },
-        "Request.ClinicalRegisterRequest": {
-            "type": "object",
-            "properties": {
-                "document": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                }
-            }
-        },
-        "Request.LoginRequest": {
+        "Request.UpdateSensorRequest": {
             "type": "object",
             "required": [
-                "email",
-                "password"
+                "sensor",
+                "value"
             ],
             "properties": {
-                "email": {
+                "sensor": {
                     "type": "string"
                 },
-                "password": {
-                    "type": "string"
-                }
-            }
-        },
-        "Request.RegisterRequest": {
-            "type": "object",
-            "required": [
-                "birthDate",
-                "document",
-                "email",
-                "name",
-                "password"
-            ],
-            "properties": {
-                "birthDate": {
-                    "type": "string"
-                },
-                "document": {
-                    "type": "string"
-                },
-                "email": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "password": {
-                    "type": "string"
-                }
-            }
-        },
-        "Response.ClinicalInfo": {
-            "type": "object",
-            "properties": {
-                "expired": {
-                    "type": "boolean",
-                    "example": false
-                },
-                "expiresIn": {
-                    "type": "string",
-                    "example": "2025-04-08T21:45:00Z"
-                },
-                "name": {
-                    "type": "string",
-                    "example": "John Doe's Clinical Company'"
-                }
-            }
-        },
-        "Response.ErrorResponse": {
-            "type": "object",
-            "properties": {
-                "error": {
-                    "type": "string",
-                    "example": "Usuário ou Senha inválidos"
-                }
-            }
-        },
-        "Response.LoginResponse": {
-            "type": "object",
-            "properties": {
-                "clinical": {
-                    "$ref": "#/definitions/Response.ClinicalInfo"
-                },
-                "token": {
-                    "type": "string",
-                    "example": "firebase-token"
-                },
-                "user": {
-                    "$ref": "#/definitions/Response.UserInfo"
-                }
-            }
-        },
-        "Response.UserInfo": {
-            "type": "object",
-            "properties": {
-                "email": {
-                    "type": "string",
-                    "example": "johndoe@example.com"
-                },
-                "name": {
-                    "type": "string",
-                    "example": "John Doe"
-                },
-                "role": {
-                    "allOf": [
-                        {
-                            "$ref": "#/definitions/Enum.RoleEnum"
-                        }
-                    ],
-                    "example": "TUTOR"
+                "value": {
+                    "type": "integer"
                 }
             }
         }

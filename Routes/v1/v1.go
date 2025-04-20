@@ -7,6 +7,5 @@ import (
 
 func RegisterControllers(r *gin.Engine) {
 	v1 := r.Group("/api/v1")
-	Routes.RegisterAuth(v1)
 	Routes.RegisterClinical(v1)
 }

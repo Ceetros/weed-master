@@ -8,24 +8,15 @@ import (
 )
 
 type IServiceContainer interface {
-	InjectAuthController() Controller.AuthController
-	InjectClinicalController() Controller.ClinicalController
+	InjectClinicalController() Controller.SesorController
 }
 
 type Kernel struct{}
 
-func (k *Kernel) InjectAuthController() Controller.AuthController {
-	userRepository := &Repositories.UserRepository{DB: DB}
-	userService := &Service.UserService{IUserRepository: userRepository}
-	authController := Controller.AuthController{IUserService: userService}
-
-	return authController
-}
-
-func (k *Kernel) InjectClinicalController() Controller.ClinicalController {
-	clinicalRepository := Repositories.ClinicalRepository{DB: DB}
-	clinicalService := &Service.ClinicalService{IClinicalRepository: clinicalRepository}
-	clinicalController := Controller.ClinicalController{IClinicalService: clinicalService}
+func (k *Kernel) InjectClinicalController() Controller.SesorController {
+	clinicalRepository := Repositories.SensorRepository{DB: DB}
+	clinicalService := &Service.SensorService{ISensorRepository: clinicalRepository}
+	clinicalController := Controller.SesorController{ISesorService: clinicalService}
 
 	return clinicalController
 }

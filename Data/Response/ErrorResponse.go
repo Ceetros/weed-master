@@ -1,5 +1,0 @@
-package Response
-
-type ErrorResponse struct {
-	Error string `json:"error" example:"Usuário ou Senha inválidos"`
-}

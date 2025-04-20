@@ -1,95 +1,14 @@
 basePath: /
 definitions:
-  Enum.RoleEnum:
-    enum:
-    - TUTOR
-    - MANAGER
-    - DOCTOR
-    - SECRETARY
-    - ADMIN
-    type: string
-    x-enum-varnames:
-    - Tutor
-    - Manager
-    - Doctor
-    - Secretary
-    - Admin
-  Request.ClinicalRegisterRequest:
+  Request.UpdateSensorRequest:
     properties:
-      document:
+      sensor:
         type: string
-      name:
-        type: string
-    type: object
-  Request.LoginRequest:
-    properties:
-      email:
-        type: string
-      password:
-        type: string
+      value:
+        type: integer
     required:
-    - email
-    - password
-    type: object
-  Request.RegisterRequest:
-    properties:
-      birthDate:
-        type: string
-      document:
-        type: string
-      email:
-        type: string
-      name:
-        type: string
-      password:
-        type: string
-    required:
-    - birthDate
-    - document
-    - email
-    - name
-    - password
-    type: object
-  Response.ClinicalInfo:
-    properties:
-      expired:
-        example: false
-        type: boolean
-      expiresIn:
-        example: "2025-04-08T21:45:00Z"
-        type: string
-      name:
-        example: John Doe's Clinical Company'
-        type: string
-    type: object
-  Response.ErrorResponse:
-    properties:
-      error:
-        example: Usuário ou Senha inválidos
-        type: string
-    type: object
-  Response.LoginResponse:
-    properties:
-      clinical:
-        $ref: '#/definitions/Response.ClinicalInfo'
-      token:
-        example: firebase-token
-        type: string
-      user:
-        $ref: '#/definitions/Response.UserInfo'
-    type: object
-  Response.UserInfo:
-    properties:
-      email:
-        example: johndoe@example.com
-        type: string
-      name:
-        example: John Doe
-        type: string
-      role:
-        allOf:
-        - $ref: '#/definitions/Enum.RoleEnum'
-        example: TUTOR
+    - sensor
+    - value
     type: object
 host: localhost:8080
 info:
@@ -98,96 +17,37 @@ info:
   title: Vet API
   version: "1.0"
 paths:
-  /api/v1/auth/login:
+  /api/v1/sesor/update:
     post:
       consumes:
       - application/json
-      description: Autentica o usuário e retorna tokens de acesso
       parameters:
-      - description: Credenciais
+      - description: Dados do sensor
         in: body
-        name: credentials
+        name: data
         required: true
         schema:
-          $ref: '#/definitions/Request.LoginRequest'
+          $ref: '#/definitions/Request.UpdateSensorRequest'
       produces:
       - application/json
       responses:
-        "200":
-          description: OK
+        "201":
+          description: Created
           schema:
-            $ref: '#/definitions/Response.LoginResponse'
+            type: boolean
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/Response.ErrorResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/Response.ErrorResponse'
-      summary: Login com email e senha
-      tags:
-      - Auth
-  /api/v1/auth/register:
-    post:
-      consumes:
-      - application/json
-      parameters:
-      - description: Dados do novo usuário
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/Request.RegisterRequest'
-      produces:
-      - application/json
-      responses:
-        "201":
-          description: Created
-          schema:
-            $ref: '#/definitions/Response.LoginResponse'
-        "400":
-          description: Requisição inválida
-          schema:
-            $ref: '#/definitions/Response.ErrorResponse'
+            type: boolean
         "500":
-          description: Erro interno
+          description: Internal Server Error
           schema:
-            $ref: '#/definitions/Response.ErrorResponse'
-      summary: Registra um novo usuário
-      tags:
-      - Auth
-  /api/v1/clinical/register:
-    post:
-      consumes:
-      - application/json
-      parameters:
-      - description: Dados da nova Clinica
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/Request.ClinicalRegisterRequest'
-      produces:
-      - application/json
-      responses:
-        "201":
-          description: Created
-          schema:
-            $ref: '#/definitions/Response.ClinicalInfo'
-        "400":
-          description: Requisição inválida
-          schema:
-            $ref: '#/definitions/Response.ErrorResponse'
-        "500":
-          description: Erro interno
-          schema:
-            $ref: '#/definitions/Response.ErrorResponse'
+            type: boolean
       security:
       - BearerAuth: []
-      summary: Registra uma nova clinica
+      summary: Atualiza um sensor
       tags:
-      - Clinical
+      - Sensor
 securityDefinitions:
   BearerAuth:
     in: header

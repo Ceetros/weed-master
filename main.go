@@ -1,7 +1,6 @@
 package main
 
 import (
-	"Api/Auth"
 	"Api/Config"
 	"Api/Controller/Swagger"
 	"Api/Data/Models"
@@ -32,24 +31,12 @@ func main() {
 	Config.ConnectDatabase()
 
 	err = Config.DB.AutoMigrate(
-		&Models.User{},
-		&Models.Guardian{},
-		&Models.Patient{},
-		&Models.Clinical{},
-		&Models.Address{},
-		&Models.ClinicalUser{},
-		&Models.Treatment{},
-		&Models.TreatmentNote{},
-		&Models.Consultation{},
-		&Models.Exam{},
-		&Models.Drug{},
+		&Models.Analytics{},
 	)
 	if err != nil {
 		log.Fatal(err.Error())
 		return
 	}
-
-	Auth.InitFirebase()
 
 	r := gin.Default()
 	v1.RegisterControllers(r)
