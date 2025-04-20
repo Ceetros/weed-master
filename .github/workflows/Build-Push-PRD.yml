@@ -40,7 +40,7 @@ jobs:
           port: 22
           password: '${{ secrets.PASSWORD }}'
           source: build/
-          target: /home/ubuntu/apivet
+          target: /home/ubuntu/weed-master
 
       - name: Run
         uses: appleboy/ssh-action@master
@@ -51,8 +51,8 @@ jobs:
           password: '${{ secrets.PASSWORD }}'
           port: 22
           script: |
-            cd /home/ubuntu/apivet
+            cd /home/ubuntu/weed-master
             ls -l
-            sudo systemctl stop goweb
-            sudo systemctl start goweb
-            sudo systemctl status goweb
+            sudo systemctl stop weedm
+            sudo systemctl start weedm
+            sudo systemctl status weedm
