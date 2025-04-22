@@ -4,7 +4,9 @@ import (
 	"Api/Config"
 	"Api/Controller/Swagger"
 	"Api/Data/Models"
+	"Api/Discord"
 	v1 "Api/Routes/v1"
+	"github.com/bwmarrin/discordgo"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"log"
@@ -36,6 +38,35 @@ func main() {
 	if err != nil {
 		log.Fatal(err.Error())
 		return
+	}
+
+	session, _ := discordgo.New("Bot " + os.Getenv("DISCORD_TOKEN"))
+	session.Identify.Intents = discordgo.IntentsGuildMessages
+
+	session.AddHandler(func(s *discordgo.Session, r *discordgo.Ready) {
+		println("Bot inicializado!", r.User.ID)
+	})
+
+	gg, err := session.Guild(os.Getenv("DISCORD_GUILD"))
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+
+	_, err = session.Channel(os.Getenv("DISCORD_NOTIFICATION_CHAT"))
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+
+	bot := Discord.Discord{Bot: session, MainGuild: gg, NotificationChannel: os.Getenv("DISCORD_NOTIFICATION_CHAT")}
+
+	Discord.SetBot(bot)
+
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+	err = session.Open()
+	if err != nil {
+		log.Fatalf("could not open session: %s", err)
 	}
 
 	r := gin.Default()

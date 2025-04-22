@@ -3,8 +3,11 @@ package Controller
 import (
 	"Api/Abstractions/Services"
 	"Api/Data/Request"
+	"Api/Discord"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"log"
+	"os"
 )
 
 type SesorController struct {
@@ -32,5 +35,23 @@ func (controller *SesorController) Update(c *gin.Context) {
 	}
 
 	ret, state := controller.ISesorService.Update(request)
+	if request.UmidityPercent <= 79 {
+		bot := Discord.GetDiscord()
+		bot.Bot.ChannelMessageSend(bot.NotificationChannel, fmt.Sprintf("**UMIDADE BAIXA**\nHumidade Relativa:%v%%\n@here\n@everyone", 10))
+		channel, err := bot.Bot.UserChannelCreate(os.Getenv("DISCORD_OWNER"))
+		if err != nil {
+			// If an error occurred, we failed to create the channel.
+			//
+			// Some common causes are:
+			// 1. We don't share a server with the user (not possible here).
+			// 2. We opened enough DM channels quickly enough for Discord to
+			//    label us as abusing the endpoint, blocking us from opening
+			//    new ones.
+			fmt.Println("error creating channel:", err)
+			return
+		}
+
+		_, err = bot.Bot.ChannelMessageSend(channel.ID, fmt.Sprintf("**UMIDADE BAIXA**\nHumidade Relativa:%v%%\n@here\n@everyone", 10))
+	}
 	c.JSON(ret, state)
 }
